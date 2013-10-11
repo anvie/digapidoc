@@ -48,11 +48,17 @@ class HtmlBuilder(docs:Seq[DocBase]) extends Slf4jLogger {
         var apiNavsStr = StringBuilder.newBuilder
 
         for (doc <- docs){
-            docStr ++= doc.toHtmlString
 
             doc match {
-                case DocGroup(name) =>
-                    apiNavsStr ++= <li><a href={"#" + name}>{name}</a></li>.toString
+                case dg:DocGroup =>
+                    apiNavsStr ++= <li><a href={"#" + dg.name}>{dg.name}</a></li>.toString
+
+                    docStr ++= dg.toHtmlString
+
+                    for (docItem <- dg.docs){
+                        docStr ++= docItem.toHtmlString
+                    }
+
                 case _ =>
             }
         }

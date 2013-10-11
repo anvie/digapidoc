@@ -13,14 +13,17 @@ object FileParser {
     def parse(file:String):Seq[DocBase] = parse(new File(file))
 
     def parse(file:File):Seq[DocBase] = {
-        parse(new FileInputStream(file))
+        parse(new FileInputStream(file), file.getName)
     }
 
-    def parse(fileIs:InputStream):Seq[DocBase] = {
+    def parse(fileIs:InputStream, fileName:String):Seq[DocBase] = {
         val isr = new InputStreamReader(fileIs)
         val bfr = new BufferedReader(isr)
 
         var docs = Seq.newBuilder[DocBase]
+        
+        var currentDocGroup:DocGroup = null
+        
         var line = ""
         do {
             line = bfr.readLine()
@@ -37,7 +40,23 @@ object FileParser {
                         line = bfr.readLine() + "\n"
                     }while(line != null && !line.contains("*/"))
                     val textRaw = sb.result().trim + "\n*/"
-                    docs += Doc.parse(textRaw)
+                    
+                    val doc = Doc.parse(textRaw, fileName)
+                    
+                    doc match {
+                        case dg:DocGroup =>
+                            currentDocGroup = dg
+                            docs ++= Seq(currentDocGroup)
+                            
+//                        case d:Doc if docGroups.contains(d) =>
+                        case d:Doc =>
+                            if (currentDocGroup != null)
+                                currentDocGroup.docs ++= Seq(d)
+                            else
+                                docs += d
+                    }
+                    
+                    
                 }
             }
 

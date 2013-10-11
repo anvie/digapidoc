@@ -16,6 +16,7 @@ class HtmlBuilderSpec extends Specification {
             val docs = FileParser.scan("test/source/src")
             val hb = HtmlBuilder.create("API keren", "Ini dokumentasi dari API keren",
                 docs, "test/out")
+
             hb.setTemplateDir("web-templates/twbs")
                 .generate()
 

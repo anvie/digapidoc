@@ -14,7 +14,9 @@ sealed abstract class DocBase {
     def toHtmlString:String
 }
 
-case class DocGroup(name:String) extends DocBase {
+case class DocGroup(name:String, file:String) extends DocBase {
+
+    var docs = Seq.empty[Doc]
 
     def toHtmlString:String = {
         val id = name.replaceAll("""\W+""","-").trim
@@ -51,60 +53,62 @@ case class Doc(endpoint:DocEndpointDef, desc:String, symbols:Seq[DocSymbol], par
                     <span><code>{endpoint.uriFormat}</code></span>
                 </h4>
             </div>
-            <p class="lead"><small>{desc}</small></p>
-            {
-            if (symbols.length > 0){
-                <div><strong>Symbols:</strong></div>
-                <table class="table table-striped">
-                    {
-                    symbols.map { sym =>
-                        <tr><td>{sym.name}</td><td>{sym.desc}</td></tr>
-                    }.foldLeft(NodeSeq.Empty)(_ ++ _)
-                    }
-                </table>
-            }else{
-                NodeSeq.Empty
-            }
-            }
-            {
-            if (params.length > 0){
+            <div class="panel-body">
+                <p class="lead"><small>{desc}</small></p>
                 {
-                    if (symbols.length > 0){
-                        <div style="margin-top: 10px; height: 10px;"></div>
-                    }else
-                        NodeSeq.Empty
-                } ++
-                <div><strong>Parameters:</strong></div>
-                <table class="table table-striped">
+                if (symbols.length > 0){
+                    <div><strong>Symbols:</strong></div>
+                        <table class="table table-striped">
+                            {
+                            symbols.map { sym =>
+                                <tr><td>{sym.name}</td><td>{sym.desc}</td></tr>
+                            }.foldLeft(NodeSeq.Empty)(_ ++ _)
+                            }
+                        </table>
+                }else{
+                    NodeSeq.Empty
+                }
+                }
+                {
+                if (params.length > 0){
                     {
-                    params.map { param =>
-                        <tr><td style="width: 150px;"><code>{param.name}</code></td>
-                            <td style="width: 200px;">
-                                {
-                                param.requirement match {
-                                    case "required" =>
-                                        <span class="label label-danger">{param.requirement}</span>
-                                    case "optional" =>
-                                        <span class="label label-info">{param.requirement}</span>
-                                }
-                                }
+                        if (symbols.length > 0){
+                            <div style="margin-top: 10px; height: 10px;"></div>
+                        }else
+                            NodeSeq.Empty
+                    } ++
+                        <div><strong>Parameters:</strong></div>
+                        <table class="table table-striped">
+                            {
+                            params.map { param =>
+                                <tr><td style="width: 150px;"><code>{param.name}</code></td>
+                                    <td style="width: 200px;">
+                                        {
+                                        param.requirement match {
+                                            case "required" =>
+                                                <span class="label label-danger">{param.requirement}</span>
+                                            case "optional" =>
+                                                <span class="label label-info">{param.requirement}</span>
+                                        }
+                                        }
 
-                                {
-                                if (param.defaultValue.length > 0){
-                                    <span> default: {param.defaultValue}</span>
-                                }else{
-                                    NodeSeq.Empty
-                                }
-                                }
-                            </td>
-                            <td>{param.desc}</td></tr>
-                    }.foldLeft(NodeSeq.Empty)(_ ++ _)
-                    }
-                </table>
-            }else{
-                NodeSeq.Empty
-            }
-            }
+                                        {
+                                        if (param.defaultValue.length > 0){
+                                            <span> default: {param.defaultValue}</span>
+                                        }else{
+                                            NodeSeq.Empty
+                                        }
+                                        }
+                                    </td>
+                                    <td>{param.desc}</td></tr>
+                            }.foldLeft(NodeSeq.Empty)(_ ++ _)
+                            }
+                        </table>
+                }else{
+                    NodeSeq.Empty
+                }
+                }
+            </div>
         </div>.toString()
     }
 
@@ -169,14 +173,14 @@ object Doc {
 
     private val groupExtractorRe = """(?s).+?GROUP\: (.*)\n.+""".r
 
-    def parse(text:String):DocBase = {
+    def parse(text:String, fileName:String="-"):DocBase = {
         val normText = normalize(text)
 
         if (isGroup(text)){
 
             text match {
                 case groupExtractorRe(name) =>
-                    DocGroup(name)
+                    DocGroup(name, fileName)
                 case x =>
                     throw new ParserException("Cannot extract group name")
             }

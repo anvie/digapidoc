@@ -19,16 +19,41 @@
             border-top: 1px solid #cacaca;
             border-right: 1px solid #cacaca;
         }
+        .nav-pills {
+            width: 190px;
+        }
+        .container-fluid {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .panel-heading {
+            cursor: pointer;
+        }
     </style>
-</head>
-<body>
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="assets/js/jquery.js"></script>
+    <script src="assets/js/jquery.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var $ph = $(".panel-heading");
+            $ph.next().css("display","none");
+            $ph.click(function(){
+               var $body = $(this).next();
+               if ($body.css("display") == "none"){
+                   $body.css("display", "block");
+               }else{
+                    $body.css("display", "none");
+               }
+            });
+        });
+    </script>
+</head>
+<body data-spy="scroll" data-target="">
+
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="assets/js/bootstrap.min.js"></script>
 
-<div class="container">
+<div class="container-fluid">
 
 
     <div class="page-header">
@@ -39,7 +64,7 @@
     <div class="row">
         <div class="col-md-2">
             <div class="bs-sidebar hidden-print affix" role="complementary">
-                <ul class="nav nav-pills nav-stacked nav-rg affix" id="group-tab">
+                <ul id="ApiNavbar" class="nav nav-pills nav-stacked nav-rg affix">
                     %{api-navs}
                 </ul>
             </div>
