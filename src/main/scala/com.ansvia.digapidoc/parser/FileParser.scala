@@ -11,6 +11,8 @@ import com.ansvia.commons.logging.Slf4jLogger
  */
 object FileParser extends Slf4jLogger {
 
+    var connectedDocGroup = Seq.empty[DocGroup]
+
     def parse(file:String, includeSymbols:Map[String,String]):Seq[DocBase] =
         parse(new File(file), includeSymbols)
 
@@ -49,9 +51,15 @@ object FileParser extends Slf4jLogger {
                     
                     doc match {
                         case dg:DocGroup =>
-                            currentDocGroup = dg
-                            docs ++= Seq(currentDocGroup)
-                            
+
+                            if (!connectedDocGroup.map(_.name).contains(dg.name)){
+                                connectedDocGroup ++= Seq(dg)
+                                currentDocGroup = dg
+                                docs ++= Seq(currentDocGroup)
+                            }else{
+                                currentDocGroup = connectedDocGroup.find(_.name == dg.name).get
+                            }
+
 //                        case d:Doc if docGroups.contains(d) =>
                         case d:Doc =>
                             info("processing: " + d)
