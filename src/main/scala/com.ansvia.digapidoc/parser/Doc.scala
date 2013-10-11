@@ -176,7 +176,7 @@ object Doc {
         rvStr.substring(0, rvStr.length - 1).trim
     }
 
-    private val groupExtractorRe = """(?s).+?GROUP\: (.*)\n.+""".r
+    private val groupExtractorRe = """(?s).+?GROUP\: (.*?)\n.+""".r
 
     def parse(text:String, fileName:String="-"):DocBase = {
         val normText = normalize(text)
