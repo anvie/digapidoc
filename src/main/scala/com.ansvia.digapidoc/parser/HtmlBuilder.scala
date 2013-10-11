@@ -45,16 +45,25 @@ class HtmlBuilder(docs:Seq[DocBase]) extends Slf4jLogger {
         val source = io.Source.fromFile(sf).mkString
 
         var docStr = StringBuilder.newBuilder
+        var apiNavsStr = StringBuilder.newBuilder
 
         for (doc <- docs){
             docStr ++= doc.toHtmlString
+
+            doc match {
+                case DocGroup(name) =>
+                    apiNavsStr ++= <li><a href={"#" + name}>{name}</a></li>.toString
+                case _ =>
+            }
         }
 
         val result = source.render(Map("api.header.title" -> title,
             "api.header.desc" -> desc,
+            "api-navs" -> apiNavsStr.result(),
             "api-docs" -> docStr.result()))
 
         docStr.clear()
+        apiNavsStr.clear()
 
         val out = outFile("index.html")
 

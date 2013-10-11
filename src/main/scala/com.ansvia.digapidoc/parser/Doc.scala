@@ -15,9 +15,11 @@ sealed abstract class DocBase {
 }
 
 case class DocGroup(name:String) extends DocBase {
+
     def toHtmlString:String = {
+        val id = name.replaceAll("""\W+""","-").trim
         <div class="page-header">
-            <h1>
+            <h1 id={id}>
                 {name}
             </h1>
         </div>.toString()

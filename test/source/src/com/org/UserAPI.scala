@@ -1,10 +1,10 @@
 package com.org
 
 /** apidoc **
-  * GROUP: User API
+  * GROUP: User
   */
 
-class MyApi {
+class UserAPI {
 
 
     /**

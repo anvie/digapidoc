@@ -59,17 +59,17 @@ class FileParserSpec extends Specification {
         }
         "scan source dir" in {
             val docs = FileParser.scan("test/source")
-            docs.length must_== 4
+            docs.length must_== 6
             docs(0).isInstanceOf[DocGroup]
             val doc0 = docs(0).asInstanceOf[DocGroup]
-            doc0.name must_== "User API"
+            doc0.name must_== "Post"
             val doc1 = docs(1).asInstanceOf[Doc]
             doc1.endpoint.method must_== "GET"
-            doc1.endpoint.uriFormat must_== "/user/{USER-ID-OR-NAME}"
-            doc1.desc must_== "Mendapatkan informasi user."
+            doc1.endpoint.uriFormat must_== "/post/{POST-ID}"
+            doc1.desc must_== "Mendapatkan data single post."
             doc1.params.length must_== 1
-            doc1.params(0).name must_== "ref"
-            doc1.params(0).desc must_== "reference id."
+            doc1.params(0).name must_== "current_user_id"
+            doc1.params(0).desc must_== "reference of current user id."
         }
     }
 
