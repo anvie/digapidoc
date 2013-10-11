@@ -236,6 +236,8 @@ object Doc {
                 catch {
                     case e:ParserException if e.getMessage == "No `+ Parameters` sign" =>
                         Seq.empty[DocParam]
+                    case e:ParserException if e.getMessage == "`+ Parameters` sign defined but no any param defined" =>
+                        Seq.empty[DocParam]
                 }
 
             Doc(endpointDef, desc, symbols ++ symbolsByUri, params)
@@ -446,6 +448,9 @@ object Doc {
 
         if (startingIndex == -1)
             throw new ParserException("No `+ Parameters` sign")
+
+        if (text.length < startingIndex + 15)
+            throw new ParserException("`+ Parameters` sign defined but no any param defined")
 
         val startingText = text.substring(startingIndex + 15)
         var sb = StringBuilder.newBuilder
