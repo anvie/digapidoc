@@ -6,4 +6,5 @@ resolvers ++= Seq(
 
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.4.0")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-proguard" % "0.2.2")
+addSbtPlugin("org.scala-sbt" % "xsbt-proguard-plugin" % "0.1.3")
+

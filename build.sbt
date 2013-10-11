@@ -8,6 +8,8 @@ scalaVersion := "2.9.2"
 
 parallelExecution in Test := false
 
+mainClass := Some("com.ansvia.digapidoc.Digapidoc")
+
 resolvers ++= Seq(
 	"Sonatype Releases" at "https://oss.sonatype.org/content/groups/scala-tools",
 	"typesafe repo"   at "http://repo.typesafe.com/typesafe/releases",
@@ -53,8 +55,18 @@ pomExtra := (
   </developers>)
 
 
-proguardSettings
+seq(ProguardPlugin.proguardSettings :_*)
 
-ProguardKeys.options in Proguard ++= Seq("-dontnote", "-dontwarn", "-ignorewarnings")
+proguardOptions += keepMain("com.ansvia.digapidoc.Digapidoc")
 
-ProguardKeys.options in Proguard += ProguardOptions.keepMain("com.ansvia.digapidoc.Digapidoc")
+proguardOptions ++= Seq("-dontnote",
+    "-dontwarn", "-ignorewarnings",
+//    "-dontoptimize",
+//    "-dontshrink",
+    "-keep interface scala.ScalaObject",
+    "-keep class com.ansvia.*",
+    "-keep class com.ansvia.commons.logging.Slf4jLogger",
+    "-keepclasseswithmembers public class * { public static void main(java.lang.String[]); }",
+    "-keep class ch.qos.logback.*")
+
+
