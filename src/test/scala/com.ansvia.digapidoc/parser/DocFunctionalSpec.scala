@@ -148,8 +148,19 @@ class DocFunctionalSpec extends Specification {
                 """.stripMargin.trim
             Doc.stripIdent(_data).trim must_== _expected
         }
+        "parse to DocGroup" in {
+            val _data =
+                """
+                  |/** apidoc **
+                  |* GROUP: User
+                  |*/
+                """.stripMargin.trim
+            val dg = Doc.parse(_data)
+            dg must beAnInstanceOf[DocGroup]
+            dg.asInstanceOf[DocGroup].name must_== "User"
+        }
         "parse to Doc" in {
-            val doc = Doc.parse(exampleData)
+            val doc = Doc.parse(exampleData).asInstanceOf[Doc]
             doc.endpoint.method must_== "GET"
             doc.endpoint.uriFormat must_== "channels/{ID-OR-NAME}/articles"
             doc.desc must_== "Untuk mendapatkan stream articles pada channel."
@@ -178,7 +189,7 @@ class DocFunctionalSpec extends Specification {
                   |*/
                 """.stripMargin.trim
 
-            val doc = Doc.parse(data)
+            val doc = Doc.parse(data).asInstanceOf[Doc]
             doc.endpoint.method must_== "GET"
             doc.endpoint.uriFormat must_== "channels/{ID-OR-NAME}/articles"
             doc.desc must_== "Untuk mendapatkan stream articles pada channel.\n" +

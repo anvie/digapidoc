@@ -46,25 +46,30 @@ class FileParserSpec extends Specification {
 
 
     "FileParser" should {
-//        "parse file and producing sequence of doc" in {
-//            val rv = FileParser.parse(new ByteArrayInputStream(data.getBytes))
-//            rv.length must_== 2
-//            rv(0).endpoint.method must_== "GET"
-//            rv(0).endpoint.uriFormat must_== "channels/{ID-OR-NAME}/articles"
-//            rv(1).endpoint.method must_== "PUT"
-//            rv(1).endpoint.uriFormat must_== "user/{ID-OR-NAME}"
-//            rv(1).desc must_== "Untuk meng-update informasi user\n" +
-//                "agar bisa keren dan mantap."
-//        }
+        "parse file and producing sequence of doc" in {
+            val rv = FileParser.parse(new ByteArrayInputStream(data.getBytes))
+                .asInstanceOf[Seq[Doc]]
+            rv.length must_== 2
+            rv(0).endpoint.method must_== "GET"
+            rv(0).endpoint.uriFormat must_== "channels/{ID-OR-NAME}/articles"
+            rv(1).endpoint.method must_== "PUT"
+            rv(1).endpoint.uriFormat must_== "user/{ID-OR-NAME}"
+            rv(1).desc must_== "Untuk meng-update informasi user\n" +
+                "agar bisa keren dan mantap."
+        }
         "scan source dir" in {
             val docs = FileParser.scan("test/source")
-            docs.length must_== 3
-            docs(0).endpoint.method must_== "GET"
-            docs(0).endpoint.uriFormat must_== "/user/{USER-ID-OR-NAME}"
-            docs(0).desc must_== "Mendapatkan informasi user."
-            docs(0).params.length must_== 1
-            docs(0).params(0).name must_== "ref"
-            docs(0).params(0).desc must_== "reference id."
+            docs.length must_== 4
+            docs(0).isInstanceOf[DocGroup]
+            val doc0 = docs(0).asInstanceOf[DocGroup]
+            doc0.name must_== "User API"
+            val doc1 = docs(1).asInstanceOf[Doc]
+            doc1.endpoint.method must_== "GET"
+            doc1.endpoint.uriFormat must_== "/user/{USER-ID-OR-NAME}"
+            doc1.desc must_== "Mendapatkan informasi user."
+            doc1.params.length must_== 1
+            doc1.params(0).name must_== "ref"
+            doc1.params(0).desc must_== "reference id."
         }
     }
 

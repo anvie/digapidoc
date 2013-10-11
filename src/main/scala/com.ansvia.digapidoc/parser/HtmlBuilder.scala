@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils
  *
  */
 
-class HtmlBuilder(docs:Seq[Doc]) extends Slf4jLogger {
+class HtmlBuilder(docs:Seq[DocBase]) extends Slf4jLogger {
 
     var title = ""
     var desc = ""
@@ -107,7 +107,7 @@ class HtmlBuilder(docs:Seq[Doc]) extends Slf4jLogger {
 
 object HtmlBuilder {
 
-    def create(title:String, desc:String, docs:Seq[Doc], outDir:String) = {
+    def create(title:String, desc:String, docs:Seq[DocBase], outDir:String) = {
         val hb = new HtmlBuilder(docs)
         hb.title = title
         hb.desc = desc

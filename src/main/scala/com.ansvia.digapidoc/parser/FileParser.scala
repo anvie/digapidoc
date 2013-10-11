@@ -10,17 +10,17 @@ import java.io._
  */
 object FileParser {
 
-    def parse(file:String):Seq[Doc] = parse(new File(file))
+    def parse(file:String):Seq[DocBase] = parse(new File(file))
 
-    def parse(file:File):Seq[Doc] = {
+    def parse(file:File):Seq[DocBase] = {
         parse(new FileInputStream(file))
     }
 
-    def parse(fileIs:InputStream):Seq[Doc] = {
+    def parse(fileIs:InputStream):Seq[DocBase] = {
         val isr = new InputStreamReader(fileIs)
         val bfr = new BufferedReader(isr)
 
-        var docs = Seq.newBuilder[Doc]
+        var docs = Seq.newBuilder[DocBase]
         var line = ""
         do {
             line = bfr.readLine()
@@ -49,10 +49,10 @@ object FileParser {
         docs.result()
     }
 
-    def scan(dir:String):Seq[Doc] = scan(new File(dir))
+    def scan(dir:String):Seq[DocBase] = scan(new File(dir))
 
-    def scan(dir:File):Seq[Doc] = {
-        var rv = Seq.newBuilder[Doc]
+    def scan(dir:File):Seq[DocBase] = {
+        var rv = Seq.newBuilder[DocBase]
 
         dir.listFiles().foreach { f =>
 

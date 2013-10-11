@@ -10,7 +10,21 @@ import scala.xml.NodeSeq
  *
  */
 
-case class Doc(endpoint:DocEndpointDef, desc:String, symbols:Seq[DocSymbol], params:Seq[DocParam]) {
+sealed abstract class DocBase {
+    def toHtmlString:String
+}
+
+case class DocGroup(name:String) extends DocBase {
+    def toHtmlString:String = {
+        <div class="page-header">
+            <h1>
+                {name}
+            </h1>
+        </div>.toString()
+    }
+}
+
+case class Doc(endpoint:DocEndpointDef, desc:String, symbols:Seq[DocSymbol], params:Seq[DocParam]) extends DocBase {
 
     def toHtmlString:String = {
         val panelClass = {
@@ -151,30 +165,50 @@ object Doc {
         rvStr.substring(0, rvStr.length - 1).trim
     }
 
-    def parse(text:String):Doc = {
+    private val groupExtractorRe = """(?s).+?GROUP\: (.*)\n.+""".r
+
+    def parse(text:String):DocBase = {
         val normText = normalize(text)
-        
-        val endpointDef = getEndpointDef(normText)
-        val desc = getDescription(normText)
-        val symbols =
-            try {
-                getSymbols(normText)
+
+        if (isGroup(text)){
+
+            text match {
+                case groupExtractorRe(name) =>
+                    DocGroup(name)
+                case x =>
+                    throw new ParserException("Cannot extract group name")
             }
-            catch {
-                case e:ParserException if e.getMessage == "No `+ Symbols` sign" =>
-                    Seq.empty[DocSymbol]
-            }
-        val params =
-            try {
-                getParams(normText + "\n")
-            }
-            catch {
-                case e:ParserException if e.getMessage == "No `+ Parameters` sign" =>
-                    Seq.empty[DocParam]
-            }
-        
-        Doc(endpointDef, desc, symbols, params)
+
+        }else{
+            val endpointDef = getEndpointDef(normText)
+            val desc = getDescription(normText)
+            val symbols =
+                try {
+                    getSymbols(normText)
+                }
+                catch {
+                    case e:ParserException if e.getMessage == "No `+ Symbols` sign" =>
+                        Seq.empty[DocSymbol]
+                }
+            val params =
+                try {
+                    getParams(normText + "\n")
+                }
+                catch {
+                    case e:ParserException if e.getMessage == "No `+ Parameters` sign" =>
+                        Seq.empty[DocParam]
+                }
+
+            Doc(endpointDef, desc, symbols, params)
+        }
+
+
     }
+
+    def isGroup(text:String) = {
+        text.contains("GROUP: ")
+    }
+
     
     private val supportedMethods = Seq(
         "POST", "PUT", "GET", "DELETE"

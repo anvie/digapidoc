@@ -1,5 +1,8 @@
 package com.org
 
+/** apidoc **
+  * GROUP: User API
+  */
 
 class MyApi {
 
