@@ -11,13 +11,16 @@ import com.ansvia.commons.logging.Slf4jLogger
  */
 object FileParser extends Slf4jLogger {
 
-    def parse(file:String):Seq[DocBase] = parse(new File(file))
+    def parse(file:String, includeSymbols:Map[String,String]):Seq[DocBase] =
+        parse(new File(file), includeSymbols)
 
-    def parse(file:File):Seq[DocBase] = {
-        parse(new FileInputStream(file), file.getName)
+    def parse(file:File, includeSymbols:Map[String,String]):Seq[DocBase] = {
+        parse(new FileInputStream(file), file.getName, includeSymbols)
     }
 
-    def parse(fileIs:InputStream, fileName:String):Seq[DocBase] = {
+    def parse(fileIs:InputStream, fileName:String,
+              includeSymbols:Map[String,String]):Seq[DocBase] = {
+
         val isr = new InputStreamReader(fileIs)
         val bfr = new BufferedReader(isr)
 
@@ -42,7 +45,7 @@ object FileParser extends Slf4jLogger {
                     }while(line != null && !line.contains("*/"))
                     val textRaw = sb.result().trim + "\n*/"
                     
-                    val doc = Doc.parse(textRaw, fileName)
+                    val doc = Doc.parse(textRaw, fileName, includeSymbols)
                     
                     doc match {
                         case dg:DocGroup =>
@@ -70,9 +73,10 @@ object FileParser extends Slf4jLogger {
         docs.result()
     }
 
-    def scan(dir:String):Seq[DocBase] = scan(new File(dir))
+    def scan(dir:String, includeSymbols:Map[String,String]):Seq[DocBase] =
+        scan(new File(dir), includeSymbols)
 
-    def scan(dir:File):Seq[DocBase] = {
+    def scan(dir:File, includeSymbols:Map[String,String]):Seq[DocBase] = {
 
         if (!dir.exists())
             throw new NotExists("Directory not exists: " + dir.getAbsolutePath)
@@ -85,12 +89,12 @@ object FileParser extends Slf4jLogger {
         dir.listFiles().foreach { f =>
 
             if (f.isDirectory){
-                rv ++= scan(f)
+                rv ++= scan(f, includeSymbols)
 
             }else{
 
                 debug("processing: " + f)
-                rv ++= parse(f)
+                rv ++= parse(f, includeSymbols)
 
             }
         }

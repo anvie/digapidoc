@@ -190,8 +190,10 @@ object Doc {
     private val groupExtractorRe = """(?s).+?GROUP\: (.*?)\n.+""".r
     private val symbolKeyNameExtractorRe = """\{[a-zA-Z0-9_\-]*?\}""".r
 
-    def parse(text:String, fileName:String="-"):DocBase = {
-        val normText = normalize(text)
+    def parse(text:String, fileName:String="-",
+              includeSymbols:Map[String,String]=Map.empty[String,String]):DocBase = {
+
+        var normText = normalize(text)
 
         if (isGroup(text)){
 
@@ -203,6 +205,12 @@ object Doc {
             }
 
         }else{
+            import com.ansvia.commons.StringTemplate._
+
+            for ((k, v) <- includeSymbols){
+                normText = normText.render(Map(("include=" + k) -> v))
+            }
+
             val endpointDef = getEndpointDef(normText)
             val desc = getDescription(normText)
             val symbols =
