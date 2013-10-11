@@ -124,10 +124,21 @@ case class DocEndpointDef(method:String, uriFormat:String)
 case class DocSymbol(name:String, desc:String)
 case class DocParam(name:String, desc:String, requirement:String, defaultValue:String)
 
+trait SymbolMapper {
+    def map(key:String):String
+}
+
+object NopSymbolMapper extends SymbolMapper {
+    def map(key: String) = key
+}
+
+
 /**
  * Documentation class representation.
  */
 object Doc {
+
+    var symbolMapper:SymbolMapper = NopSymbolMapper
 
     def normalize(text:String) = {
         val newText = StringBuilder.newBuilder
@@ -137,7 +148,7 @@ object Doc {
         var offsetL = 0
         var foundChar = false
 
-        for ( (t, i) <- fixIdentText.zipWithIndex){
+        for ((t, i) <- fixIdentText.zipWithIndex){
             try {
                 if (i == 0) {
                     if (!text.startsWith("/*"))
@@ -177,6 +188,7 @@ object Doc {
     }
 
     private val groupExtractorRe = """(?s).+?GROUP\: (.*?)\n.+""".r
+    private val symbolKeyNameExtractorRe = """\{[a-zA-Z0-9_\-]*?\}""".r
 
     def parse(text:String, fileName:String="-"):DocBase = {
         val normText = normalize(text)
@@ -201,6 +213,14 @@ object Doc {
                     case e:ParserException if e.getMessage == "No `+ Symbols` sign" =>
                         Seq.empty[DocSymbol]
                 }
+            val symbolsByUri = {
+                // get symbol from uri
+                val ss = symbolKeyNameExtractorRe.findAllIn(endpointDef.uriFormat)
+                ss.map { s =>
+                    val sNoCurly = stripCurlyBraces(s)
+                    DocSymbol(sNoCurly, symbolMapper.map(sNoCurly))
+                }.toSeq
+            }
             val params =
                 try {
                     getParams(normText + "\n")
@@ -210,11 +230,17 @@ object Doc {
                         Seq.empty[DocParam]
                 }
 
-            Doc(endpointDef, desc, symbols, params)
+            Doc(endpointDef, desc, symbols ++ symbolsByUri, params)
         }
 
 
     }
+
+    private val curlyBracesStriperRe = """^\{|\}$""".r
+    private def stripCurlyBraces(text:String) = {
+        curlyBracesStriperRe.replaceAllIn(text, "")
+    }
+
 
     def isGroup(text:String) = {
         text.contains("GROUP: ")

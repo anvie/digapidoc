@@ -3,7 +3,8 @@ package com.ansvia.digapidoc
 import org.streum.configrity.Configuration
 import java.io.File
 import com.ansvia.commons.logging.Slf4jLogger
-import com.ansvia.digapidoc.parser.{DigapiException, InvalidParameter, FileParser, HtmlBuilder}
+import com.ansvia.digapidoc.parser._
+import com.ansvia.digapidoc.parser.InvalidParameter
 
 object Digapidoc extends Slf4jLogger {
 
@@ -21,6 +22,12 @@ object Digapidoc extends Slf4jLogger {
                 throw InvalidParameter("Config file not found: " + configFile.getAbsolutePath)
 
             val conf = Configuration.load(configFile.getAbsolutePath)
+
+            Doc.symbolMapper = new SymbolMapper {
+                def map(key: String) = {
+                    conf("symbols." + key, "-")
+                }
+            }
 
             val docs = FileParser.scan(conf[String]("source-dir"))
             val hb = HtmlBuilder.create(conf[String]("title"), conf[String]("desc"),
