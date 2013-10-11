@@ -84,6 +84,12 @@ object FileParser extends Slf4jLogger {
     def scan(dir:String, includeSymbols:Map[String,String]):Seq[DocBase] =
         scan(new File(dir), includeSymbols)
 
+    /**
+     * Scan directories for digapidoc.
+     * @param dir directory.
+     * @param includeSymbols symbol to include.
+     * @return
+     */
     def scan(dir:File, includeSymbols:Map[String,String]):Seq[DocBase] = {
 
         if (!dir.exists())

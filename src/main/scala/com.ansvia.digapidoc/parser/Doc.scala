@@ -227,7 +227,7 @@ object Doc {
                 ss.map { s =>
                     val sNoCurly = stripCurlyBraces(s)
                     DocSymbol(sNoCurly, symbolMapper.map(sNoCurly))
-                }.toSeq
+                }.toSeq.filter(s => !symbols.map(_.name).contains(s.name))
             }
             val params =
                 try {
