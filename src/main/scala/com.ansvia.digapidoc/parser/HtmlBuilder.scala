@@ -55,7 +55,7 @@ class HtmlBuilder(docs:Seq[DocBase]) extends Slf4jLogger {
 
                     docStr ++= dg.toHtmlString
 
-                    for (docItem <- dg.docs){
+                    for (docItem <- dg.docs.sortBy(_.endpoint.uriFormat.length)){
                         docStr ++= docItem.toHtmlString
                     }
 

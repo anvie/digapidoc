@@ -31,6 +31,7 @@ object Digapidoc extends Slf4jLogger {
 
             val includeSymbols = conf.detach("include-text").data.map(x => x._1 -> x._2.replace("\\n", "\n"))
             val docs = FileParser.scan(conf[String]("source-dir"), includeSymbols)
+
             val hb = HtmlBuilder.create(conf[String]("title"), conf[String]("desc"),
                 docs, conf[String]("output-dir"))
 
