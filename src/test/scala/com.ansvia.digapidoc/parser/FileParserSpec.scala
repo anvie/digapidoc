@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream
  *
  */
 class FileParserSpec extends Specification {
+    args(sequential = true)
 
     val data =
         """
@@ -47,7 +48,8 @@ class FileParserSpec extends Specification {
 
     "FileParser" should {
         "parse file and producing sequence of doc" in {
-            val rv = FileParser.parse(new ByteArrayInputStream(data.getBytes), "Dummy.scala")
+            val rv = FileParser.parse(new ByteArrayInputStream(data.getBytes),
+                "Dummy.scala", Map.empty[String, String])
                 .asInstanceOf[Seq[Doc]]
             rv.length must_== 2
             rv(0).endpoint.method must_== "GET"
@@ -58,7 +60,7 @@ class FileParserSpec extends Specification {
                 "agar bisa keren dan mantap."
         }
         "scan source dir" in {
-            val docs = FileParser.scan("test/source")
+            val docs = FileParser.scan("test/source/src", Map.empty[String,String])
             docs.length must_== 2
             docs(0) must beAnInstanceOf[DocGroup]
             docs(1) must beAnInstanceOf[DocGroup]

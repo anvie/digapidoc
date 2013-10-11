@@ -10,10 +10,12 @@ import java.io.File
  *
  */
 class HtmlBuilderSpec extends Specification {
+    args(sequential = true)
 
     "HtmlBuilder" should {
         "build generated html" in {
-            val docs = FileParser.scan("test/source/src")
+
+            val docs = FileParser.scan("test/source/src", Map.empty[String,String])
             val hb = HtmlBuilder.create("API keren", "Ini dokumentasi dari API keren",
                 docs, "test/out")
 

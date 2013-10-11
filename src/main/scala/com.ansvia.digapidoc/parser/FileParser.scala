@@ -65,8 +65,11 @@ object FileParser extends Slf4jLogger {
                             info("processing: " + d)
                             if (currentDocGroup != null)
                                 currentDocGroup.docs ++= Seq(d)
-                            else
-                                docs += d
+                            else {
+                                if (!docs.result().contains(d)){
+                                    docs += d
+                                }
+                            }
                     }
                     
                     
@@ -81,8 +84,9 @@ object FileParser extends Slf4jLogger {
         docs.result()
     }
 
-    def scan(dir:String, includeSymbols:Map[String,String]):Seq[DocBase] =
-        scan(new File(dir), includeSymbols)
+    def scan(dir:String, includeSymbols:Map[String,String]):Seq[DocBase] = {
+        scan(new File(dir), includeSymbols, true)
+    }
 
     /**
      * Scan directories for digapidoc.
@@ -90,7 +94,11 @@ object FileParser extends Slf4jLogger {
      * @param includeSymbols symbol to include.
      * @return
      */
-    def scan(dir:File, includeSymbols:Map[String,String]):Seq[DocBase] = {
+    def scan(dir:File, includeSymbols:Map[String,String], first:Boolean=false):Seq[DocBase] = {
+
+        if (first){
+            connectedDocGroup = Seq.empty[DocGroup]
+        }
 
         if (!dir.exists())
             throw new NotExists("Directory not exists: " + dir.getAbsolutePath)
@@ -103,6 +111,7 @@ object FileParser extends Slf4jLogger {
         dir.listFiles().foreach { f =>
 
             if (f.isDirectory){
+
                 rv ++= scan(f, includeSymbols)
 
             }else{
