@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        .endpoint-section {
+            padding: 10px;
+            border-left: 1px solid #cacaca;
+            border-top: 1px solid #cacaca;
+            border-right: 1px solid #cacaca;
+        }
+    </style>
+</head>
+<body>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="assets/js/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="assets/js/bootstrap.min.js"></script>
+
+<div class="container">
+
+
+    <div class="page-header">
+        <h1>%{api.header.title}</h1>
+        <p class="lead">%{api.header.desc}</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+                nav bar here
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="tab-content">
+                %{api-docs}
+            </div>
+            <div style="padding: 100px; border: 1px solid #cacaca;">api info here</div>
+            <div style="padding: 100px; border: 1px solid #cacaca;">api info here</div>
+            <div style="padding: 100px; border: 1px solid #cacaca;">api info here</div>
+            <div style="padding: 100px; border: 1px solid #cacaca;">api info here</div>
+            <div style="padding: 100px; border: 1px solid #cacaca;">api info here</div>
+            <div style="padding: 100px; border: 1px solid #cacaca;">api info here</div>
+        </div>
+    </div>
+
+</div>
+
+
+
+</body>
+</html>
