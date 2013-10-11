@@ -30,6 +30,11 @@ case class DocGroup(name:String, file:String) extends DocBase {
 
 case class Doc(endpoint:DocEndpointDef, desc:String, symbols:Seq[DocSymbol], params:Seq[DocParam]) extends DocBase {
 
+
+    override def toString = {
+        "%s %s".format(endpoint.method, endpoint.uriFormat)
+    }
+
     def toHtmlString:String = {
         val panelClass = {
             endpoint.method match {

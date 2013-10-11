@@ -59,7 +59,17 @@ class HtmlBuilder(docs:Seq[DocBase]) extends Slf4jLogger {
                         docStr ++= docItem.toHtmlString
                     }
 
-                case _ =>
+                case d:Doc =>
+            }
+        }
+
+        val unknownDocs = docs.filter(_.isInstanceOf[Doc])
+
+        if (unknownDocs.length > 0){
+            apiNavsStr ++= <li><a href="#Unknown-Group">Unknown group</a></li>.toString
+            docStr ++= DocGroup("Unknown Group", "??").toHtmlString
+            unknownDocs.foreach { uDoc =>
+                docStr ++= uDoc.toHtmlString
             }
         }
 

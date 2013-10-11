@@ -1,6 +1,7 @@
 package com.ansvia.digapidoc.parser
 
 import java.io._
+import com.ansvia.commons.logging.Slf4jLogger
 
 /**
  * Author: robin
@@ -8,7 +9,7 @@ import java.io._
  * Time: 12:39 PM
  *
  */
-object FileParser {
+object FileParser extends Slf4jLogger {
 
     def parse(file:String):Seq[DocBase] = parse(new File(file))
 
@@ -50,6 +51,7 @@ object FileParser {
                             
 //                        case d:Doc if docGroups.contains(d) =>
                         case d:Doc =>
+                            info("processing: " + d)
                             if (currentDocGroup != null)
                                 currentDocGroup.docs ++= Seq(d)
                             else
@@ -71,6 +73,13 @@ object FileParser {
     def scan(dir:String):Seq[DocBase] = scan(new File(dir))
 
     def scan(dir:File):Seq[DocBase] = {
+
+        if (!dir.exists())
+            throw new NotExists("Directory not exists: " + dir.getAbsolutePath)
+
+        if (!dir.isDirectory)
+            throw new InvalidParameter(dir.getAbsolutePath + " is not directory")
+
         var rv = Seq.newBuilder[DocBase]
 
         dir.listFiles().foreach { f =>
@@ -80,6 +89,7 @@ object FileParser {
 
             }else{
 
+                debug("processing: " + f)
                 rv ++= parse(f)
 
             }
