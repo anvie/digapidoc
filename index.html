@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My cool API v2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        .endpoint-section {
+            padding: 10px;
+            border-left: 1px solid #cacaca;
+            border-top: 1px solid #cacaca;
+            border-right: 1px solid #cacaca;
+        }
+        .nav-pills {
+            width: 190px;
+        }
+        .container-fluid {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .panel-heading {
+            cursor: pointer;
+        }
+    </style>
+
+    <script src="assets/js/jquery.js"></script>
+
+    <!--<script type="text/javascript">-->
+        <!--$(document).ready(function(){-->
+            <!--var $ph = $(".panel-heading");-->
+            <!--$ph.next().css("display","none");-->
+            <!--$ph.click(function(){-->
+               <!--var $body = $(this).next();-->
+               <!--if ($body.css("display") == "none"){-->
+                   <!--$body.css("display", "block");-->
+               <!--}else{-->
+                    <!--$body.css("display", "none");-->
+               <!--}-->
+            <!--});-->
+        <!--});-->
+    <!--</script>-->
+</head>
+<body data-spy="scroll" data-target="">
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="assets/js/bootstrap.min.js"></script>
+
+<div class="container-fluid">
+
+
+    <div class="page-header">
+        <h1>My cool API v2</h1>
+        <p class="lead">This is My cool API v2 documentation<br />
+just an example from <a href="http://github.com/anvie/digapidoc">http://github.com/anvie/digapidoc</a>.
+</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+                <ul id="ApiNavbar" class="nav nav-pills nav-stacked nav-rg affix">
+                    <li><a href="#Post">Post</a></li><li><a href="#User">User</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="tab-content">
+                <div class="page-header">
+            <h1 id="Post">
+                Post
+            </h1>
+        </div><div class="panel panel-info endpoint-section">
+            <div class="panel-heading">
+                <h4>
+                    <span class="label label-primary">GET</span>
+                    <span><code>/post/{POST-ID}</code></span>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <p class="lead"><small>Mendapatkan data single post.</small></p>
+                <div><strong>Symbols:</strong></div><table class="table table-striped">
+                            <tr><td>POST-ID</td><td>id dari post</td></tr>
+                        </table>
+                <div style="margin-top: 10px; height: 10px;"></div><div><strong>Parameters:</strong></div><table class="table table-striped">
+                            <tr><td style="width: 150px;"><code>current_user_id</code></td>
+                                    <td style="width: 200px;">
+                                        <span class="label label-danger">required</span>
+
+                                        
+                                    </td>
+                                    <td>reference of current user id.</td></tr>
+                        </table>
+            </div>
+        </div><div class="page-header">
+            <h1 id="User">
+                User
+            </h1>
+        </div><div class="panel panel-info endpoint-section">
+            <div class="panel-heading">
+                <h4>
+                    <span class="label label-primary">GET</span>
+                    <span><code>/user/{USER-ID-OR-NAME}</code></span>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <p class="lead"><small>Mendapatkan informasi user.</small></p>
+                <div><strong>Symbols:</strong></div><table class="table table-striped">
+                            <tr><td>USER-ID-OR-NAME</td><td>id user atau nama user.</td></tr>
+                        </table>
+                <div style="margin-top: 10px; height: 10px;"></div><div><strong>Parameters:</strong></div><table class="table table-striped">
+                            <tr><td style="width: 150px;"><code>ref</code></td>
+                                    <td style="width: 200px;">
+                                        <span class="label label-danger">required</span>
+
+                                        
+                                    </td>
+                                    <td>reference id.</td></tr>
+                        </table>
+            </div>
+        </div><div class="panel panel-danger endpoint-section">
+            <div class="panel-heading">
+                <h4>
+                    <span class="label label-danger">DELETE</span>
+                    <span><code>/user/{USER-ID-OR-NAME}</code></span>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <p class="lead"><small>Untuk menghapus user.</small></p>
+                <div><strong>Symbols:</strong></div><table class="table table-striped">
+                            <tr><td>USER-ID-OR-NAME</td><td>Can be user ID or user name</td></tr>
+                        </table>
+                
+            </div>
+        </div><div class="panel panel-warning endpoint-section">
+            <div class="panel-heading">
+                <h4>
+                    <span class="label label-warning">PUT</span>
+                    <span><code>/user/{USER-ID-OR-NAME}</code></span>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <p class="lead"><small>Untuk meng-update user</small></p>
+                <div><strong>Symbols:</strong></div><table class="table table-striped">
+                            <tr><td>USER-ID-OR-NAME</td><td>id user atau nama user.</td></tr>
+                        </table>
+                <div style="margin-top: 10px; height: 10px;"></div><div><strong>Parameters:</strong></div><table class="table table-striped">
+                            <tr><td style="width: 150px;"><code>full_name</code></td>
+                                    <td style="width: 200px;">
+                                        <span class="label label-info">optional</span>
+
+                                        
+                                    </td>
+                                    <td>user full name.</td></tr><tr><td style="width: 150px;"><code>birth_date</code></td>
+                                    <td style="width: 200px;">
+                                        <span class="label label-info">optional</span>
+
+                                        
+                                    </td>
+                                    <td>user birth date.</td></tr><tr><td style="width: 150px;"><code>email</code></td>
+                                    <td style="width: 200px;">
+                                        <span class="label label-danger">required</span>
+
+                                        
+                                    </td>
+                                    <td>user email.</td></tr>
+                        </table>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+</body>
+</html>
