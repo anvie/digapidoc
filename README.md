@@ -31,6 +31,8 @@ In your code add the following comment:
 
 And run the digapidoc. You need to create your config first.
 
+For more example see [test/source](https://github.com/anvie/digapidoc/tree/master/test/source/src/com/org) dir.
+
 Configuration
 --------------------
 

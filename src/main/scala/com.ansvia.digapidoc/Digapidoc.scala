@@ -35,6 +35,7 @@ object Digapidoc extends Slf4jLogger {
             import scala.io.Source
 
             val incDir = conf[String]("include-dir")
+            val outDir = conf[String]("output-dir")
 
             val desc = {
                 val _desc = conf[String]("desc")
@@ -44,14 +45,18 @@ object Digapidoc extends Slf4jLogger {
                     _desc
             }
             val hb = HtmlBuilder.create(conf[String]("title"), desc,
-                docs, conf[String]("output-dir"))
+                docs, outDir)
 
             hb.setTemplateDir(conf[String]("template-dir"))
                 .generate()
 
+            info("html generated: " + outDir + "/index.html")
 
         }
         catch {
+            case e:InvalidParameter =>
+                error(e.getMessage)
+                println("Usage: java -jar digapidoc.jar [CONFIG-FILE]")
             case e:DigapiException =>
                 error(e.getMessage)
                 sys.exit(2)

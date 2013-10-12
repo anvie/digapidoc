@@ -4,6 +4,8 @@ name := "digapidoc"
 
 description := ""
 
+version := "0.2-beta"
+
 scalaVersion := "2.9.2"
 
 parallelExecution in Test := false

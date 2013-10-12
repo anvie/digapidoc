@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration debug="false">
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <target>System.out</target>
         <encoder>
             <pattern>%date{MM/dd HH:mm:ss} %-5level %logger{1} - %msg%n</pattern>
         </encoder>
