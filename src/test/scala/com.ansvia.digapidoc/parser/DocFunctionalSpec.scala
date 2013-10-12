@@ -25,7 +25,7 @@ class DocFunctionalSpec extends Specification {
           |*
           |*      + sticky=`all` - about sticky.
           |*      + offset=`0` - starting offset.
-          |*      %{offsetLimit}
+          |*
           |*/
         """.stripMargin.trim
 
@@ -43,7 +43,7 @@ class DocFunctionalSpec extends Specification {
           |
           |+ sticky=`all` - about sticky.
           |+ offset=`0` - starting offset.
-          |%{offsetLimit}
+          |
           |
         """.stripMargin.trim
 
@@ -63,7 +63,7 @@ class DocFunctionalSpec extends Specification {
           |+ Parameters:
           |
           |+ attribute
-          |%{offsetLimit}
+          |
           |
         """.stripMargin.trim
 
@@ -115,6 +115,7 @@ class DocFunctionalSpec extends Specification {
         }
         "get params" in {
             val params = Doc.getParams(expected)
+            params.length must_== 2
             params(0).name must_== "sticky"
             params(0).desc must_== "about sticky."
             params(0).requirement must_== "optional"
@@ -167,7 +168,7 @@ class DocFunctionalSpec extends Specification {
             doc.symbols.length must_== 1
             doc.params.length must_== 2
         }
-        "parse to Doc compled" in {
+        "parse to Doc complex" in {
 
             val data =
                 """
@@ -185,7 +186,7 @@ class DocFunctionalSpec extends Specification {
                   |*
                   |*      + sticky=`all` - about sticky.
                   |*      + offset=`0` - starting offset.
-                  |*      %{offsetLimit}
+                  |*
                   |*/
                 """.stripMargin.trim
 

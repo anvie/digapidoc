@@ -13,7 +13,7 @@ class HtmlBuilderSpec extends Specification {
     args(sequential = true)
 
     "HtmlBuilder" should {
-        "build generated html" in {
+        "generate html" in {
 
             val docs = FileParser.scan("test/source/src", Map.empty[String,String])
             val hb = HtmlBuilder.create("API keren", "Ini dokumentasi dari API keren",

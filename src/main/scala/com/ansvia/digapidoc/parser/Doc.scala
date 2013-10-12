@@ -458,6 +458,7 @@ object Doc {
         var readyCapture = false
         var captureDone = false
         var rv = Seq.newBuilder[DocParam]
+        val eot = startingText.length-1
 
         for ( (t, i) <- startingText.zipWithIndex ){
             try {
@@ -471,6 +472,10 @@ object Doc {
 
 
                 if (readyCapture && t == '\n'){
+                    captureDone = true
+                    readyCapture = false
+                }else if(readyCapture && i == eot){
+                    sb += t
                     captureDone = true
                     readyCapture = false
                 }

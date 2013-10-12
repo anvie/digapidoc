@@ -57,7 +57,7 @@ include-dir = ./include
 # The template html dir where Digapidoc will be use
 template-dir = ./web-templates/twbs
 
-# include tex, just like `include-dir` but from text, not file.
+# include text, just like `include-dir` but from text, not file.
 include-text {
     offset-limit = "+ offset=`0` - starting offset.\n+ limit=`10` - ends limit"
 }
