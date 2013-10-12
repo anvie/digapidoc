@@ -60,8 +60,10 @@ class FileParserSpec extends Specification {
                 "agar bisa keren dan mantap."
         }
         "scan source dir" in {
-            val docs = FileParser.scan("test/source/src", Map.empty[String,String])
+            var docs = FileParser.scan("test/source/src", Map.empty[String, String])
             docs.length must_== 2
+            docs = docs.filter(_.isInstanceOf[DocGroup]).map(_.asInstanceOf[DocGroup])
+                .sortBy(_.name)
             docs(0) must beAnInstanceOf[DocGroup]
             docs(1) must beAnInstanceOf[DocGroup]
             val dg1 = docs(0).asInstanceOf[DocGroup]
