@@ -13,8 +13,8 @@ mainClass := Some("com.ansvia.digapidoc.Digapidoc")
 resolvers ++= Seq(
 	"Sonatype Releases" at "https://oss.sonatype.org/content/groups/scala-tools",
 	"typesafe repo"   at "http://repo.typesafe.com/typesafe/releases",
-	"Ansvia release repo" at "http://scala.repo.com.ansvia.digapidoc.com/releases",
-	"Ansvia snapshot repo" at "http://scala.repo.com.ansvia.digapidoc.com/nexus/content/repositories/snapshots"
+	"Ansvia release repo" at "http://scala.repo.ansvia.com/releases",
+	"Ansvia snapshot repo" at "http://scala.repo.ansvia.com/nexus/content/repositories/snapshots"
 )
 
 libraryDependencies ++= Seq(
