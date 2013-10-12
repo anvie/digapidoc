@@ -1,17 +1,19 @@
-Digapidoc
-=========
+Digapidoc [![Build Status](https://drone.io/github.com/anvie/digapidoc/status.png)](https://drone.io/github.com/anvie/digapidoc/latest)
+=============
 
 A Simple rest API documentation generator. Digapidoc is just parse source code that contains comment 
 with Digapidoc format and generate it to static html. 
 
-Digapidoc don't rule your code just rule your comment, whatever your code is.
+Digapidoc don't rule your code just rule your comment, whatever your code is. 
+
+If you need more advanced API documentation generator you may try http://apiblueprint.org/
 
 Example
 -----------
 
 In your code add the following comment:
 
-```scala
+```
 /**
  * GET /post/{POST-ID}
  *
@@ -67,6 +69,19 @@ symbols {
 }
 
 ```
+
+You can run digapidoc like this:
+
+```
+$ java -jar digapidoc.jar myapidoc.conf
+```
+
+Open your generated html using your browser, for this example your html will be placed in `./out/index.html`.
+
+Or you can see the online output example here: [http://anvie.github.io/digapidoc](http://anvie.github.io/digapidoc/index.html)
+
+
+
 
 
 
