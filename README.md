@@ -81,6 +81,10 @@ Open your generated html using your browser, for this example your html will be 
 Or you can see the online output example here: [http://anvie.github.io/digapidoc](http://anvie.github.io/digapidoc/index.html)
 
 
+Download
+------------
+
+You can download Digapidoc from https://github.com/anvie/digapidoc/releases
 
 
 
