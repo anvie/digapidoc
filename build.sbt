@@ -24,7 +24,8 @@ libraryDependencies ++= Seq(
     "ch.qos.logback" % "logback-classic" % "1.0.13",
     "org.streum" %% "configrity-core" % "1.0.0",
     "com.ansvia" % "ansvia-commons" % "0.0.8",
-    "commons-io" % "commons-io" % "2.0.1"
+    "commons-io" % "commons-io" % "2.0.1",
+    "eu.henkelmann" % "actuarius_2.9.2" % "0.2.6"
 )
 
 //EclipseKeys.withSource := true

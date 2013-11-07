@@ -2,6 +2,7 @@ package com.ansvia.digapidoc.parser
 
 import java.io.{InputStreamReader, BufferedReader, ByteArrayInputStream}
 import scala.xml.NodeSeq
+import eu.henkelmann.actuarius.ActuariusTransformer
 
 /**
  * Author: robin
@@ -59,7 +60,7 @@ case class Doc(endpoint:DocEndpointDef, desc:String, symbols:Seq[DocSymbol], par
                 </h4>
             </div>
             <div class="panel-body">
-                <p class="lead"><small>{desc}</small></p>
+                <div>{Doc.markdownToNs(desc)}</div>
                 {
                 if (symbols.length > 0){
                     <div><strong>Symbols:</strong></div>
@@ -105,7 +106,7 @@ case class Doc(endpoint:DocEndpointDef, desc:String, symbols:Seq[DocSymbol], par
                                         }
                                         }
                                     </td>
-                                    <td>{param.desc}</td></tr>
+                                    <td>{Doc.markdownToNs(param.desc.replace("\n", "\n\n"))}</td></tr>
                             }.foldLeft(NodeSeq.Empty)(_ ++ _)
                             }
                         </table>
@@ -139,6 +140,12 @@ object NopSymbolMapper extends SymbolMapper {
 object Doc {
 
     var symbolMapper:SymbolMapper = NopSymbolMapper
+
+    val markdownTransform = new ActuariusTransformer()
+
+    def markdownToNs(text:String):NodeSeq = {
+        scala.xml.XML.loadString("<div>" + markdownTransform(text) + "</div>")
+    }
 
     def normalize(text:String) = {
         val newText = StringBuilder.newBuilder
