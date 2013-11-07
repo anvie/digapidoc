@@ -67,6 +67,27 @@ class DocFunctionalSpec extends Specification {
           |
         """.stripMargin.trim
 
+
+    val dataMultiParamLine =
+        """
+          |/**
+          | * GET /user/[USER-ID]
+          | *
+          | * Get user data
+          | *
+          | *     + Parameters:
+          | *
+          | *         + state - state can be one of:
+          | *                    * deleted - return only deleted user.
+          | *                    * actived - return only actived user.
+          | *                    * all -- return all.
+          | *
+          | */
+          |def test(){
+          |}
+        """.stripMargin.trim
+
+
     "Doc" should {
         "normalize text and strip comment correctly" in {
             Doc.normalize(exampleData) must_== expected
@@ -198,7 +219,19 @@ class DocFunctionalSpec extends Specification {
             doc.symbols.length must_== 1
             doc.params.length must_== 2
         }
+        "parse multi param correctly" in {
+            val doc = Doc.parse(dataMultiParamLine).asInstanceOf[Doc]
+            doc.endpoint.method must_== "GET"
+            doc.endpoint.uriFormat must_== "/user/[USER-ID]"
+            doc.params(0).desc must_==
+                """
+                  |state can be one of:
+                  |* deleted - return only deleted user.
+                  |* actived - return only actived user.
+                  |* all -- return all.
+                """.stripMargin.trim
+        }
     }
 
-    
+
 }

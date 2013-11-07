@@ -213,6 +213,10 @@ object Doc {
 
             val endpointDef = getEndpointDef(normText)
             val desc = getDescription(normText)
+
+            /**
+             * Parse symbols
+             */
             val symbols =
                 try {
                     getSymbols(normText)
@@ -229,6 +233,10 @@ object Doc {
                     DocSymbol(sNoCurly, symbolMapper.map(sNoCurly))
                 }.toSeq.filter(s => !symbols.map(_.name).contains(s.name))
             }
+
+            /**
+             * Parse parameters.
+             */
             val params =
                 try {
                     getParams(normText + "\n")
@@ -422,7 +430,7 @@ object Doc {
         rv.result()
     }
 
-    val paramExtractorRe = """\+ ([a-zA-Z0-9_\-]+)(\=`(.*?)`)? ?(\((required|optional)\))?( ?\- (.*))?""".r
+    val paramExtractorRe = """(?s)\+ ([a-zA-Z0-9_\-]+)(\=`(.*?)`)? ?(\((required|optional)\))?( ?\- (.*))?""".r
 
     def parseParam(paramText:String) = {
         if (!paramText.startsWith("+"))
@@ -440,6 +448,9 @@ object Doc {
             case paramExtractorRe(paramKeyName, _, defaultValue, _, requirement, _, desc) =>
                 (paramKeyName, desc, requirement, defaultValue)
         }
+
+
+
     }
 
 
@@ -472,8 +483,17 @@ object Doc {
 
 
                 if (readyCapture && t == '\n'){
-                    captureDone = true
-                    readyCapture = false
+                    if (i+1 < eot){
+                        if (startingText(i+1) == '\n' || startingText(i+1) == '+'){
+                            captureDone = true
+                            readyCapture = false
+                        }else{
+                            sb += t
+                        }
+                    }else{
+                        captureDone = true
+                        readyCapture = false
+                    }
                 }else if(readyCapture && i == eot){
                     sb += t
                     captureDone = true
