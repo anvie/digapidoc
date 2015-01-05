@@ -4,7 +4,7 @@ name := "digapidoc"
 
 description := ""
 
-version := "0.3-beta"
+version := "0.5-beta"
 
 scalaVersion := "2.9.2"
 
