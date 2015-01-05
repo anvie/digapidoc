@@ -56,7 +56,25 @@ class HtmlBuilder(docs:Seq[DocBase]) extends Slf4jLogger {
                     docStr ++= dg.toHtmlString
 
                     for (docItem <- dg.docs.sortBy(_.endpoint.uriFormat.length)){
-                        docStr ++= docItem.toHtmlString
+                        if (this.excludedTags.length > 0){
+                            if (!docItem.tags.containsSlice(this.excludedTags)){
+                                if (this.includedTags.length > 0){
+                                    if (docItem.tags.containsSlice(this.includedTags)){
+                                        docStr ++= docItem.toHtmlString
+                                    }
+                                }else
+                                    docStr ++= docItem.toHtmlString
+                            }
+                        }else if (this.includedTags.length > 0){
+                            if (docItem.tags.containsSlice(this.includedTags)){
+                                docStr ++= docItem.toHtmlString
+                            }
+                        }
+
+//                        else{
+//                            docStr ++= docItem.toHtmlString
+//                        }
+
                     }
 
                 case d:Doc =>
@@ -108,6 +126,20 @@ class HtmlBuilder(docs:Seq[DocBase]) extends Slf4jLogger {
         templateDir = dir
         this
     }
+
+    private var excludedTags:Seq[String] = Nil
+    private var includedTags:Seq[String] = Nil
+
+    def excludeTags(tags:Seq[String]) = {
+        this.excludedTags = tags
+        this
+    }
+
+    def includeTags(tags:Seq[String]) = {
+        this.includedTags = tags
+        this
+    }
+
 
     def absPath(tail:String) =
         templateDir + tail

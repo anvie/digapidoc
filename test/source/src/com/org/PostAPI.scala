@@ -19,6 +19,8 @@ class PostAPI {
      * + Parameters:
      *
      *      + current_user_id - reference of current user id.
+     *
+     * + Tags: public
      */
     def getPost() {
         // @TODO(you): code here

@@ -5,6 +5,8 @@ import java.io.File
 import com.ansvia.commons.logging.Slf4jLogger
 import com.ansvia.digapidoc.parser._
 import com.ansvia.digapidoc.parser.InvalidParameter
+import scala.io.Source
+
 
 object Digapidoc extends Slf4jLogger {
 
@@ -32,8 +34,6 @@ object Digapidoc extends Slf4jLogger {
             val includeSymbols = conf.detach("include-text").data.map(x => x._1 -> x._2.replace("\\n", "\n"))
             val docs = FileParser.scan(conf[String]("source-dir"), includeSymbols)
 
-            import scala.io.Source
-
             val incDir = conf[String]("include-dir")
             val outDir = conf[String]("output-dir")
 
@@ -48,6 +48,8 @@ object Digapidoc extends Slf4jLogger {
                 docs, outDir)
 
             hb.setTemplateDir(conf[String]("template-dir"))
+                .excludeTags(conf[String]("exclude.tags", "").split(',').map(_.trim).filter(_.length > 0).toSeq)
+                .includeTags(conf[String]("include.tags", "").split(',').map(_.trim).filter(_.length > 0).toSeq)
                 .generate()
 
             info("html generated: " + outDir + "/index.html")

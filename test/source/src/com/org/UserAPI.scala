@@ -19,6 +19,8 @@ class UserAPI {
      * + Parameters:
      *
      *      + ref - reference id.
+     *
+     * + Tags: public
      */
     def getUserInfo() = {
         // @TODO(you): code here
@@ -32,6 +34,8 @@ class UserAPI {
      * + Symbols:
      *
      *      + {USER-ID-OR-NAME} - id user atau nama user.
+     *
+     * + Tags: private
      */
     def deleteUser() = {
         // @TODO(you): code here
@@ -51,6 +55,8 @@ class UserAPI {
      *      + full_name=`` - user full name.
      *      + birth_date=`` - user birth date.
      *      + email - user email.
+     *
+     * + Tags: public
      **/
     def updateUser() = {
 

@@ -208,6 +208,7 @@ class DocFunctionalSpec extends Specification {
                   |*      + sticky=`all` - about sticky.
                   |*      + offset=`0` - starting offset.
                   |*
+                  |* + Tags: post,public
                   |*/
                 """.stripMargin.trim
 
@@ -217,7 +218,8 @@ class DocFunctionalSpec extends Specification {
             doc.desc must_== "Untuk mendapatkan stream articles pada channel.\n" +
                 "dan membuatnya semakin keren."
             doc.symbols.length must_== 1
-            doc.params.length must_== 2
+            doc.params.map(_.name) must_== List("sticky", "offset")
+            doc.tags.toList must_== List("post", "public")
         }
         "parse multi param correctly" in {
             val doc = Doc.parse(dataMultiParamLine).asInstanceOf[Doc]

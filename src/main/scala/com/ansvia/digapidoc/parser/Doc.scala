@@ -29,7 +29,7 @@ case class DocGroup(name:String, file:String) extends DocBase {
     }
 }
 
-case class Doc(endpoint:DocEndpointDef, desc:String, symbols:Seq[DocSymbol], params:Seq[DocParam]) extends DocBase {
+case class Doc(endpoint:DocEndpointDef, desc:String, symbols:Seq[DocSymbol], params:Seq[DocParam], tags:Seq[String]) extends DocBase {
 
 
     override def toString = {
@@ -255,7 +255,19 @@ object Doc {
                         Seq.empty[DocParam]
                 }
 
-            Doc(endpointDef, desc, symbols ++ symbolsByUri, params)
+            /**
+             * Parse tags.
+             */
+            val tags = try {
+
+                getTags(normText + "\n")
+
+            }catch{
+                case e:ParserException if e.getMessage == "No `+ Tags` sign" || e.getMessage == "`+ Tags` sign defined but no any tags defined" =>
+                    Nil
+            }
+
+            Doc(endpointDef, desc, symbols ++ symbolsByUri, params, tags)
         }
 
 
@@ -461,6 +473,20 @@ object Doc {
     }
 
 
+    private val _keywords = Seq(
+    "Parameters", "Tags"
+    )
+    private def getKeywords(text:String):Seq[(String, Int)] = {
+        _keywords.flatMap { k =>
+            val i = text.indexOf("+ " + k)
+            if (i > -1){
+                Some( (text.substring(i + 2).split(" ").head.trim, i) )
+            }else
+                None
+        }
+    }
+
+
     def getParams(text:String):Seq[DocParam] = {
         val startingIndex = text.indexOf("+ Parameters:\n")
 
@@ -475,10 +501,20 @@ object Doc {
         var firstIter = true
         var readyCapture = false
         var captureDone = false
+        var allDone = false
         var rv = Seq.newBuilder[DocParam]
-        val eot = startingText.length-1
+        val eot = {
+            // get next keyword if any
 
-        for ( (t, i) <- startingText.zipWithIndex ){
+            val ks = getKeywords(startingText)
+
+            if (ks.length > 0)
+                ks(0)._2 - 1
+            else
+                startingText.length
+        }
+
+        for ( (t, i) <- startingText.zipWithIndex if !allDone ){
             try {
                 if (firstIter){
                     if (t != '+')
@@ -488,32 +524,36 @@ object Doc {
                     readyCapture = true
                 }
 
+                if (i+1 < eot){
+                    if (readyCapture && t == '\n'){
 
-                if (readyCapture && t == '\n'){
-                    if (i+1 < eot){
                         if (startingText(i+1) == '\n' || startingText(i+1) == '+'){
                             captureDone = true
                             readyCapture = false
                         }else{
                             sb += t
                         }
-                    }else{
+                    }else if(readyCapture && i == eot){
+                        sb += t
                         captureDone = true
                         readyCapture = false
                     }
-                }else if(readyCapture && i == eot){
+                    else {
+                        sb += t
+                    }
+                }else{
                     sb += t
                     captureDone = true
                     readyCapture = false
-                }
-                else {
-                    sb += t
+                    allDone = true
                 }
 
-                if (captureDone){
+                val chunk = sb.mkString.trim
+
+                if (captureDone && chunk.length > 1){
 
                     val (name, desc, requirement, defaultValue) =
-                        parseParam(sb.mkString.trim)
+                        parseParam(chunk)
 
                     rv += DocParam(name, desc, requirement, defaultValue)
 
@@ -531,7 +571,24 @@ object Doc {
         rv.result()
     }
     
-    
+
+    def getTags(text:String):Seq[String] = {
+        val startingIndex = text.indexOf("+ Tags:")
+
+        if (startingIndex == -1)
+            throw new ParserException("No `+ Tags` sign")
+
+        if (text.length < startingIndex + 9)
+            throw new ParserException("`+ Tags` sign defined but no any tags defined")
+
+        val startingText = text.substring(startingIndex + 8)
+
+        val tagsString = startingText.substring(0, startingText.indexOf('\n'))
+        val s = tagsString.split(',').map(_.trim).filter(_.length > 0)
+        s.toSeq
+    }
+
+
     def validate(text:String) = {
         if (!isHeaderValid(text))
             throw new ParserException("Invalid header tag")
