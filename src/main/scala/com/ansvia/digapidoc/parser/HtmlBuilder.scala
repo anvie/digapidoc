@@ -69,11 +69,9 @@ class HtmlBuilder(docs:Seq[DocBase]) extends Slf4jLogger {
                             if (docItem.tags.containsSlice(this.includedTags)){
                                 docStr ++= docItem.toHtmlString
                             }
+                        }else{
+                            docStr ++= docItem.toHtmlString
                         }
-
-//                        else{
-//                            docStr ++= docItem.toHtmlString
-//                        }
 
                     }
 
